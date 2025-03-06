@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace System_Rezerwacji_Biletów.Models
+﻿namespace System_Rezerwacji_Biletów.Models
 {
     public class User
     {

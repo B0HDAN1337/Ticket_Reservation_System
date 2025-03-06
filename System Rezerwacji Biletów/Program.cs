@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 //Add database
-builder.Services.AddDbContext<SystemReservationContext>(options => options.UseSqlite("Data Source=appdata.db"));
+builder.Services.AddDbContext<SystemReservationContext>(options => options.UseSqlite("DefaultConnection"));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 var app = builder.Build();
