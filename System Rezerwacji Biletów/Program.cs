@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;    
 using Microsoft.EntityFrameworkCore.Sqlite;
 using System_Rezerwacji_Biletów.Data;
 
@@ -9,7 +9,7 @@ builder.Services.AddControllersWithViews();
 
 //Add database
 builder.Services.AddDbContext<SystemReservationContext>(options => 
-options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 var app = builder.Build();
