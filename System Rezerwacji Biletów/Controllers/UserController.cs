@@ -29,7 +29,7 @@ namespace System_Rezerwacji_Biletów.Controllers
         {
             if(ModelState.IsValid)
             {
-                _context.Add(User);
+                _context.Users.Add(user);
                 await _context.SaveChangesAsync();
 
                 return View(nameof(Index));
