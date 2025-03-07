@@ -47,7 +47,7 @@ void InitializeDatabase(WebApplication app)
         try
         {
             var context = services.GetRequiredService<SystemReservationContext>();
-            DbInitializer.Initializer(context);  // Call your DbInitializer method here
+            DbInitializer.Initializer(context);  
         }
         catch (Exception ex)
         {
@@ -56,3 +56,4 @@ void InitializeDatabase(WebApplication app)
         }
     }
 }
+

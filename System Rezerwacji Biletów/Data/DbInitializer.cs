@@ -36,8 +36,8 @@ namespace System_Rezerwacji_Biletów.Data
 
             var users = new User[]
             {
-                new User{UserID = 1, BornDate = DateTime.Parse("1999-05-21"), LastName = "LastName",  Name = "name", email = "email" },
-                new User{UserID = 2, BornDate = DateTime.Parse("1999-05-21"), LastName = "LastName",  Name = "name", email = "email" }
+                new User{UserID = 1, BirthDate = DateTime.Parse("1999-05-21"), LastName = "LastName",  Name = "name", email = "email" },
+                new User{UserID = 2, BirthDate = DateTime.Parse("1999-05-21"), LastName = "LastName",  Name = "name", email = "email" }
             };
             foreach(User s in users)
             {
