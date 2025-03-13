@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using System_Rezerwacji_Biletów.Data;
 using System_Rezerwacji_Biletów.Models;
@@ -21,23 +22,17 @@ namespace System_Rezerwacji_Biletów.Controllers
             return View();
         }
 
+
         public async Task<IActionResult> ListUser()
         {
             var users = await _context.Users.ToListAsync();
             return View(users);
         }
 
-        public IActionResult Edit()
-        {
-            return View();
-        }
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserID, Name, LastName, BirthDate, email")] User user)
         {
-            
             if (ModelState.IsValid)
             {
                 _context.Users.Add(user);
@@ -45,35 +40,52 @@ namespace System_Rezerwacji_Biletów.Controllers
             
                 return RedirectToAction(nameof(ListUser));
             }
-
             return View(user);
         }
 
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, User user)
+        public async Task<IActionResult> Edit([Bind("UserID, Name, LastName, BirthDate, email")] User user)
         {
-            if (id != user.UserID)
-            {
-                return NotFound();  
-            }
-
             if (ModelState.IsValid)
             {
                 _context.Update(user);
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(ListUser));
-            }
-            else
+            } 
+
+                return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var userId = await _context.Users.FindAsync(id);
+
+            if(userId == null)
             {
-                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-                {
-                    Console.WriteLine($"Error: {error.ErrorMessage}");
-                }
-                return View(user);
+                return NotFound();
             }
-                return View(user);
+
+            _context.Users.Remove(userId);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(ListUser));
         }
     }
 }
