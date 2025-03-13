@@ -7,13 +7,6 @@ namespace System_Rezerwacji_Biletów.Data
         public static void Initializer(SystemReservationContext context)
         {
             context.Database.EnsureCreated();
-
-           
-
-            
-
-            
-
         }
     }
 }
