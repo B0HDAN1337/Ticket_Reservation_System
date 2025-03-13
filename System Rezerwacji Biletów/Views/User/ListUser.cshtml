@@ -23,11 +23,13 @@
                <td>@user.LastName</td> 
                <td>@user.BirthDate</td> 
                <td>@user.email</td> 
-               <td>
-                   <a asp-action="Edit" asp-route-id="@user.UserID">Edit</a>
-                   <a asp-action="Delete" asp-route-id="@user.UserID">Delete</a>
-                   
-               </td>
+                   <td>
+                    <a asp-action="Edit" asp-route-id="@user.UserID">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@user.UserID" method="post" style="display:inline;">
+                    @Html.AntiForgeryToken() 
+                    <button type="submit" class="btn btn-danger" style="inset-inline">Delete</button>
+                    </form>
+                </td>
             </tr>
         }
     </tbody>
