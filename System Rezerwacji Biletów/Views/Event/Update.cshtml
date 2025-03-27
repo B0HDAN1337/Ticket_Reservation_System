@@ -1,0 +1,34 @@
+﻿@model System_Rezerwacji_Biletów.Models.Event
+@{
+    ViewData["Title"] = "Update";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Update" method="post">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" asp-for="EventID" />
+
+            <div class="form-group">
+                <label asp-for="NameEvent" class="control-label"></label>
+                <input asp-for="NameEvent" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" type="date" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Location" class="control-label"></label>
+                <input asp-for="Location" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="description" class="control-label"></label>
+                <input asp-for="description" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
