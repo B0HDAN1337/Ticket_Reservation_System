@@ -1,0 +1,36 @@
+﻿
+@model System_Rezerwacji_Biletów.Models.Event
+@{ViewData["Title"] = "Create";}
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label class="control-label" asp-for="NameEvent">Event</label>
+                <input class="form-control" asp-for="NameEvent"/>
+                <span asp-validation-for="NameEvent" class="text-danger"></span>
+            </div>  
+            <div class="form-group">
+                <label class="control-label" asp-for="Date">Date</label>
+                <input class="form-control" type="date" asp-for="Date" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label" asp-for="Location">Location</label>
+                <input class="form-control" asp-for="Location"/>
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label" asp-for="description">Description</label>
+                <input class="form-control" asp-for="description" />
+                <span asp-validation-for="description" class="text-danger"></span>
+            </div>
+            <div class="form-lable">
+                <input class="btn btn-primary" type="submit" value="Create"/>             
+            </div>
+        </form>
+    </div>
+</div>
+

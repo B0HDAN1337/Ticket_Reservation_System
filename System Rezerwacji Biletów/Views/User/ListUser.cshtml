@@ -24,7 +24,7 @@
                <td>@user.BirthDate</td> 
                <td>@user.email</td> 
                    <td>
-                    <a asp-action="Edit" asp-route-id="@user.UserID">Edit</a>
+                    <a asp-action="Update" asp-route-id="@user.UserID">Edit</a>
                     <form asp-action="Delete" asp-route-id="@user.UserID" method="post" style="display:inline;">
                     @Html.AntiForgeryToken() 
                     <button type="submit" class="btn btn-danger" style="inset-inline">Delete</button>
