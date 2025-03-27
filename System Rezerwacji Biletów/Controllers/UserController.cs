@@ -30,7 +30,7 @@ namespace System_Rezerwacji_Biletów.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(User user)
+        public IActionResult Create(User user)
         {
             if (ModelState.IsValid)
             {
