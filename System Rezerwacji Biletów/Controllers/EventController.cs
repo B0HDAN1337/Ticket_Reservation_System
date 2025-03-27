@@ -2,21 +2,22 @@
 using System_Rezerwacji_Biletów.Repository;
 using System.Threading.Tasks;
 using System_Rezerwacji_Biletów.Models;
+using System_Rezerwacji_Biletów.Service;
 
 namespace System_Rezerwacji_Biletów.Controllers
 {
     public class EventController : Controller
     {
-        private readonly IEventRepository _eventRepository;
+        private readonly IEventService _eventService;
 
-        public EventController(IEventRepository eventRepository)
+        public EventController(IEventService eventService)
         {
-            _eventRepository = eventRepository;
+            _eventService = eventService;
         }
 
         public IActionResult ListEvent()
         {
-            var event_ =  _eventRepository.GetAll();
+            var event_ = _eventService.GetAllEvents();
             return View(event_);
         }
 
@@ -31,7 +32,7 @@ namespace System_Rezerwacji_Biletów.Controllers
         {
             if (ModelState.IsValid)
             {
-                 _eventRepository.Create(event_);
+                _eventService.CreateEvent(event_);
                 return RedirectToAction(nameof(ListEvent));
             }
 
@@ -41,7 +42,7 @@ namespace System_Rezerwacji_Biletów.Controllers
 
         public  IActionResult Update(int id)
         {
-            var event_ =  _eventRepository.GetById(id);
+            var event_ = _eventService.GetEventById(id);
 
             if (event_ == null)
             {
@@ -57,7 +58,7 @@ namespace System_Rezerwacji_Biletów.Controllers
 
             if (ModelState.IsValid)
             {
-                await _eventRepository.Update(id, event_);
+                await _eventService.UpdateEvent(id, event_);
                 return RedirectToAction(nameof(ListEvent));
             }
             return View(event_);
@@ -67,13 +68,13 @@ namespace System_Rezerwacji_Biletów.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            var event_ =  _eventRepository.GetById(id);
+            var event_ = _eventService.GetEventById(id);
             if (event_ == null)
             {
                 return NotFound();
             }
 
-             _eventRepository.Delete(id);
+            _eventService.DeleteEvent(id);
 
             return RedirectToAction(nameof(ListEvent));
         }
