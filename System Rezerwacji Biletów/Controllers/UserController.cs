@@ -1,25 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata.Ecma335;
-using System.Threading.Tasks;
-using System_Rezerwacji_Biletów.Data;
 using System_Rezerwacji_Biletów.Models;
 using System_Rezerwacji_Biletów.Repository;
+using System_Rezerwacji_Biletów.Service;
 
 namespace System_Rezerwacji_Biletów.Controllers
 {
     public class UserController : Controller
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserService _userService;
 
-        public UserController(IUserRepository userRepository)
+        public UserController(IUserService userService)
         {
-            _userRepository = userRepository;
+            _userService = userService;
         }
 
         public IActionResult ListUser()
         {
-            var users = _userRepository.GetAll();
+            var users = _userService.GetAllUsers();
             return View(users);
         }
 
@@ -34,7 +31,7 @@ namespace System_Rezerwacji_Biletów.Controllers
         {
             if (ModelState.IsValid)
             {
-                _userRepository.Create(user);
+                _userService.CreateUser(user);
             
                 return RedirectToAction(nameof(ListUser));
             }
@@ -44,7 +41,7 @@ namespace System_Rezerwacji_Biletów.Controllers
 
         public IActionResult Update(int id)
         {
-            var user = _userRepository.GetById(id);
+            var user = _userService.GetUserById(id);
 
             if (user == null)
             {
@@ -60,7 +57,7 @@ namespace System_Rezerwacji_Biletów.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _userRepository.Update(id, user);
+                await _userService.UpdateUser(id, user);
                 return RedirectToAction(nameof(ListUser));
             } 
                 return View(user);
@@ -71,14 +68,14 @@ namespace System_Rezerwacji_Biletów.Controllers
         public IActionResult Delete(int id)
         {
 
-            var userId =  _userRepository.GetById(id);
+            var userId = _userService.GetUserById(id);
 
             if(userId == null)
             {
                 return NotFound();
             }
 
-            _userRepository.Delete(id);
+            _userService.DeleteUser(id);
 
             return RedirectToAction(nameof(ListUser));
         }

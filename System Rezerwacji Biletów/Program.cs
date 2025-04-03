@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System_Rezerwacji_Biletów.Repository;
 using System_Rezerwacji_Biletów.Data;
+using System_Rezerwacji_Biletów.Service;
 
 //using System_Rezerwacji_Biletów.Services;
 
@@ -14,6 +15,10 @@ builder.Services.AddDbContext<SystemReservationContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 var app = builder.Build();
