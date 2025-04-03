@@ -2,6 +2,7 @@
 using System_Rezerwacji_Biletów.Models;
 using System_Rezerwacji_Biletów.Repository;
 using System_Rezerwacji_Biletów.Service;
+using System_Rezerwacji_Biletów.ViewModels;
 
 namespace System_Rezerwacji_Biletów.Controllers
 {
@@ -17,7 +18,17 @@ namespace System_Rezerwacji_Biletów.Controllers
         public IActionResult ListUser()
         {
             var users = _userService.GetAllUsers();
-            return View(users);
+
+            var userViewModel = users.Select(user => new UserViewModel
+            {
+                UserID = user.UserID,
+                Name = user.Name,
+                LastName = user.LastName,
+                BirthDate = user.BirthDate,
+                email = user.email
+            });
+            
+            return View(userViewModel);
         }
 
         public IActionResult Create()

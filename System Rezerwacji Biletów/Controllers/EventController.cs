@@ -3,6 +3,9 @@ using System_Rezerwacji_Biletów.Repository;
 using System.Threading.Tasks;
 using System_Rezerwacji_Biletów.Models;
 using System_Rezerwacji_Biletów.Service;
+using System_Rezerwacji_Biletów.ViewModels;
+using Microsoft.Extensions.Logging;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace System_Rezerwacji_Biletów.Controllers
 {
@@ -18,7 +21,17 @@ namespace System_Rezerwacji_Biletów.Controllers
         public IActionResult ListEvent()
         {
             var event_ = _eventService.GetAllEvents();
-            return View(event_);
+
+            var eventViewModel = event_.Select(events => new EventViewModel
+            {
+                EventID = events.EventID,
+                NameEvent = events.NameEvent,
+                Date = events.Date,
+                Location = events.Location,
+                description = events.description
+            });
+
+            return View(eventViewModel);
         }
 
         public IActionResult Create()
