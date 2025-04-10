@@ -1,0 +1,35 @@
+﻿@model IEnumerable<System_Rezerwacji_Biletów.ViewModels.TicketViewModel>
+@{
+    ViewData["Title"] = "ListTicket";
+}
+
+
+<h1>List Ticket</h1>
+<p>
+    <a asp-action="Create"> Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.price)</th>
+            <th>@Html.DisplayNameFor(model => model.NameEvent)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tickets in Model)
+        {
+            <tr>
+                <td>@tickets.price</td>
+                <td>@tickets.NameEvent</td>
+                <td>
+                    <a asp-action="Update" asp-route-id="@tickets.TicketID">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@tickets.TicketID" method="post" style="display:inline;">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger" style="inset-inline">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

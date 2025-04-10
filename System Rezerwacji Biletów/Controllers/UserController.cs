@@ -2,6 +2,7 @@
 using System_Rezerwacji_Biletów.Models;
 using System_Rezerwacji_Biletów.Repository;
 using System_Rezerwacji_Biletów.Service;
+using System_Rezerwacji_Biletów.ViewModels;
 
 namespace System_Rezerwacji_Biletów.Controllers
 {
@@ -17,25 +18,44 @@ namespace System_Rezerwacji_Biletów.Controllers
         public IActionResult ListUser()
         {
             var users = _userService.GetAllUsers();
-            return View(users);
+
+            var userViewModel = users.Select(user => new UserViewModel
+            {
+                UserID = user.UserID,
+                Name = user.Name,
+                LastName = user.LastName,
+                BirthDate = user.BirthDate,
+                email = user.email
+            });
+            
+            return View(userViewModel);
         }
 
         public IActionResult Create()
-        {
+        {     
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(User user)
+        public IActionResult Create(UserViewModel userModel)
         {
             if (ModelState.IsValid)
             {
+                var user = new User
+                {
+                    UserID = userModel.UserID,
+                    Name = userModel.Name,
+                    LastName = userModel.LastName,
+                    BirthDate = userModel.BirthDate,
+                    email = userModel.email
+                };
+
                 _userService.CreateUser(user);
             
                 return RedirectToAction(nameof(ListUser));
             }
-            return View(user);
+            return View(userModel);
         }
 
 
@@ -47,20 +67,37 @@ namespace System_Rezerwacji_Biletów.Controllers
             {
                 return NotFound();
             }
-            return View(user);
+            var userModel = new UserViewModel
+            {
+                UserID = user.UserID,
+                Name = user.Name,
+                LastName = user.LastName,
+                BirthDate = user.BirthDate,
+                email = user.email
+            };
+            return View(userModel);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(int id, User user)
+        public async Task<IActionResult> Update(int id, UserViewModel userModel)
         {
             if (ModelState.IsValid)
             {
+                var user = new User
+                {
+                    UserID = userModel.UserID,
+                    Name = userModel.Name,
+                    LastName = userModel.LastName,
+                    BirthDate = userModel.BirthDate,
+                    email = userModel.email
+                };
+
                 await _userService.UpdateUser(id, user);
                 return RedirectToAction(nameof(ListUser));
             } 
-                return View(user);
+                return View(userModel);
         }
 
         [HttpPost]

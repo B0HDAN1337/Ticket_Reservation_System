@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System_Rezerwacji_Biletów.Repository;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using System_Rezerwacji_Biletów.Models;
 using System_Rezerwacji_Biletów.Service;
+using System_Rezerwacji_Biletów.ViewModels;
+
 
 namespace System_Rezerwacji_Biletów.Controllers
 {
@@ -18,7 +19,17 @@ namespace System_Rezerwacji_Biletów.Controllers
         public IActionResult ListEvent()
         {
             var event_ = _eventService.GetAllEvents();
-            return View(event_);
+
+            var eventViewModel = event_.Select(events => new EventViewModel
+            {
+                EventID = events.EventID,
+                NameEvent = events.NameEvent,
+                Date = events.Date,
+                Location = events.Location,
+                description = events.description
+            });
+
+            return View(eventViewModel);
         }
 
         public IActionResult Create()
@@ -28,15 +39,24 @@ namespace System_Rezerwacji_Biletów.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Event event_)
+        public IActionResult Create(EventViewModel eventModel)
         {
             if (ModelState.IsValid)
             {
-                _eventService.CreateEvent(event_);
+                var events = new Event
+                {
+                    EventID = eventModel.EventID,
+                    NameEvent = eventModel.NameEvent,
+                    Date = eventModel.Date,
+                    Location = eventModel.Location,
+                    description = eventModel.description
+                };
+
+                _eventService.CreateEvent(events);
                 return RedirectToAction(nameof(ListEvent));
             }
 
-            return View(event_);
+            return View(eventModel);
         }
 
 
@@ -46,22 +66,40 @@ namespace System_Rezerwacji_Biletów.Controllers
 
             if (event_ == null)
             {
-                return NotFound();
+                return NotFound();  
             }
-            return View(event_);
+
+            var events = new EventViewModel
+            {
+                EventID = event_.EventID,
+                NameEvent = event_.NameEvent,
+                Date = event_.Date,
+                Location = event_.Location,
+                description = event_.description
+            };
+            return View(events);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(int id, Event event_)
+        public async Task<IActionResult> Update(int id, EventViewModel eventModel)
         {
 
             if (ModelState.IsValid)
             {
-                await _eventService.UpdateEvent(id, event_);
+                var events = new Event
+                {
+                    EventID = eventModel.EventID,
+                    NameEvent = eventModel.NameEvent,
+                    Date = eventModel.Date,
+                    Location = eventModel.Location,
+                    description = eventModel.description
+                };
+
+                await _eventService.UpdateEvent(id, events);
                 return RedirectToAction(nameof(ListEvent));
             }
-            return View(event_);
+            return View(eventModel);
         }
 
 

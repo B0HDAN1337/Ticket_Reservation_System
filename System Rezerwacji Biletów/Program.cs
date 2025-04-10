@@ -15,9 +15,13 @@ builder.Services.AddDbContext<SystemReservationContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITicketService, TIcketService>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
