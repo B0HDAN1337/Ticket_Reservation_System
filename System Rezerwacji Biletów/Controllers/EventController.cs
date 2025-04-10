@@ -1,3 +1,4 @@
+
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ namespace System_Rezerwacji_Biletów.Controllers
 {
     public class EventController : Controller
     {
+
         private readonly IEventService _eventService;
         private readonly IValidator<EventViewModel> _eventValidator;
 
@@ -22,6 +24,7 @@ namespace System_Rezerwacji_Biletów.Controllers
 
         public IActionResult ListEvent()
         {
+
             var event_ = _eventService.GetAllEvents();
 
             var eventViewModel = event_.Select(events => new EventViewModel
@@ -127,6 +130,7 @@ namespace System_Rezerwacji_Biletów.Controllers
         public IActionResult Delete(int id)
         {
             var event_ = _eventService.GetEventById(id);
+            
             if (event_ == null)
             {
                 return NotFound();
@@ -136,8 +140,5 @@ namespace System_Rezerwacji_Biletów.Controllers
 
             return RedirectToAction(nameof(ListEvent));
         }
-
-
-
     }
 }

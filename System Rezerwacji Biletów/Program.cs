@@ -36,7 +36,6 @@ builder.Services.AddScoped<IValidator<EventViewModel>, EventValidator>();
 builder.Services.AddScoped<IValidator<TicketViewModel>, TicketValidator>();
 
 
-
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 var app = builder.Build();
