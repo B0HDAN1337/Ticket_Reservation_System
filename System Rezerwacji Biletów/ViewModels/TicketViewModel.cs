@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
-using System_Rezerwacji_Biletów.Models;
 namespace System_Rezerwacji_Biletów.ViewModels
 {
     public class TicketViewModel
