@@ -1,6 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System_Rezerwacji_Biletów.Repository;
 using System_Rezerwacji_Biletów.Data;
+using System_Rezerwacji_Biletów.Service;
+using System_Rezerwacji_Biletów.Models;
+using FluentValidation;
+using System_Rezerwacji_Biletów.Validator;
+using System_Rezerwacji_Biletów.ViewModels;
 
 //using System_Rezerwacji_Biletów.Services;
 
@@ -12,8 +17,25 @@ builder.Services.AddControllersWithViews();
 //Add database
 builder.Services.AddDbContext<SystemReservationContext>(options => 
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+//Repository
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+
+//Service
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITicketService, TIcketService>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
+
+//Validator
+builder.Services.AddScoped<IValidator<UserViewModel>, UserValidator>();
+builder.Services.AddScoped<IValidator<EventViewModel>, EventValidator>();
+builder.Services.AddScoped<IValidator<TicketViewModel>, TicketValidator>();
+
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 var app = builder.Build();

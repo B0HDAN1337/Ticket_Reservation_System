@@ -1,0 +1,27 @@
+@model System_Rezerwacji_Biletów.ViewModels.TicketViewModel
+@{
+    ViewData["Title"] = "Update";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Update" method="post">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" asp-for="TicketID" />
+
+            <div class="form-group">
+                <label asp-for="EventID" class="control-label">Event</label>
+                <select asp-for="EventID" asp-items="ViewBag.Events" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="price" class="control-label"></label>
+                <input asp-for="price" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        </form>
+    </div>
+</div>

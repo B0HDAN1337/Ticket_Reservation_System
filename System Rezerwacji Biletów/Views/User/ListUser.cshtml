@@ -1,4 +1,4 @@
-﻿@model IEnumerable<System_Rezerwacji_Biletów.Models.User>
+@model IEnumerable<System_Rezerwacji_Biletów.ViewModels.UserViewModel>
 @{ ViewData["Title"] = "ListUser"; }
 
 
@@ -13,6 +13,7 @@
             <th>@Html.DisplayNameFor(model => model.LastName)</th>
             <th>@Html.DisplayNameFor(model => model.BirthDate)</th>
             <th>@Html.DisplayNameFor(model => model.email)</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
