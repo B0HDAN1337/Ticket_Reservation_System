@@ -1,4 +1,4 @@
-﻿@model System_Rezerwacji_Biletów.ViewModels.TicketViewModel
+@model System_Rezerwacji_Biletów.ViewModels.TicketViewModel
 @{
     ViewData["Title"] = "Update";
 }
@@ -21,6 +21,7 @@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         </form>
     </div>
 </div>

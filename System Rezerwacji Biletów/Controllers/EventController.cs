@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using FluentValidation;
+using FluentValidation.Results;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System_Rezerwacji_Biletów.Models;
 using System_Rezerwacji_Biletów.Service;
@@ -10,10 +12,12 @@ namespace System_Rezerwacji_Biletów.Controllers
     public class EventController : Controller
     {
         private readonly IEventService _eventService;
+        private readonly IValidator<EventViewModel> _eventValidator;
 
-        public EventController(IEventService eventService)
+        public EventController(IEventService eventService, IValidator<EventViewModel> validator)
         {
             _eventService = eventService;
+            _eventValidator = validator;
         }
 
         public IActionResult ListEvent()
@@ -41,7 +45,17 @@ namespace System_Rezerwacji_Biletów.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(EventViewModel eventModel)
         {
-            if (ModelState.IsValid)
+            ValidationResult eventValidation = _eventValidator.Validate(eventModel);
+
+            if (!eventValidation.IsValid)
+            {
+                foreach(var errors in eventValidation.Errors)
+                {
+                    ModelState.AddModelError("", errors.ErrorMessage);
+                }
+                return View(eventModel);
+            }
+            else
             {
                 var events = new Event
                 {
@@ -55,8 +69,6 @@ namespace System_Rezerwacji_Biletów.Controllers
                 _eventService.CreateEvent(events);
                 return RedirectToAction(nameof(ListEvent));
             }
-
-            return View(eventModel);
         }
 
 
@@ -84,8 +96,17 @@ namespace System_Rezerwacji_Biletów.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(int id, EventViewModel eventModel)
         {
-
-            if (ModelState.IsValid)
+            ValidationResult eventValidation = _eventValidator.Validate(eventModel);
+            
+            if (!eventValidation.IsValid)
+            {
+                foreach (var errors in eventValidation.Errors)
+                {
+                    ModelState.AddModelError("", errors.ErrorMessage);
+                }
+                return View(eventModel);
+            }
+            else
             {
                 var events = new Event
                 {
@@ -99,7 +120,6 @@ namespace System_Rezerwacji_Biletów.Controllers
                 await _eventService.UpdateEvent(id, events);
                 return RedirectToAction(nameof(ListEvent));
             }
-            return View(eventModel);
         }
 
 

@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+
+using FluentValidation;
+using FluentValidation.Results;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using System_Rezerwacji_Biletów.Models;
@@ -11,11 +14,13 @@ namespace System_Rezerwacji_Biletów.Controllers
     {
         private readonly ITicketService _ticketService;
         private readonly IEventService _eventService;
+        private readonly IValidator<TicketViewModel> _ticketValidator;
 
-        public TicketController(ITicketService ticketService, IEventService eventService)
+        public TicketController(ITicketService ticketService, IEventService eventService, IValidator<TicketViewModel> validator)
         {
             _ticketService = ticketService;
             _eventService = eventService;
+            _ticketValidator = validator;
         }
 
         public IActionResult ListTicket()
@@ -54,7 +59,24 @@ namespace System_Rezerwacji_Biletów.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult Create(TicketViewModel model)
         {
-            if (ModelState.IsValid)
+            ValidationResult ticketValidation = _ticketValidator.Validate(model);
+            
+            if (!ticketValidation.IsValid)
+            {
+                foreach(var errors in ticketValidation.Errors)
+                {
+                    ModelState.AddModelError("", errors.ErrorMessage);
+                }
+
+                var events = _eventService.GetAllEvents();
+                model.Events = events.Select(e => new SelectListItem
+                {
+                    Value = e.EventID.ToString(),
+                    Text = e.NameEvent
+                });
+                return View(model);
+            }
+            else
             {
                 var ticket = new Ticket
                 {
@@ -65,14 +87,6 @@ namespace System_Rezerwacji_Biletów.Controllers
                 _ticketService.CreateTicket(ticket);
                 return RedirectToAction(nameof(ListTicket));
             }
-
-            var events = _eventService.GetAllEvents();
-            model.Events = events.Select(e => new SelectListItem
-            {
-                Value = e.EventID.ToString(),
-                Text = e.NameEvent
-            });
-            return View(model);
         }
 
         public  IActionResult Update(int id)
@@ -101,7 +115,22 @@ namespace System_Rezerwacji_Biletów.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(int id, TicketViewModel model)
         {
-            if(ModelState.IsValid)
+
+            ValidationResult ticketValidation = _ticketValidator.Validate(model);
+            
+            if(!ticketValidation.IsValid)
+            {
+                foreach(var errors in ticketValidation.Errors)
+                {
+                    ModelState.AddModelError("", errors.ErrorMessage);
+                }
+
+                var events = _eventService.GetAllEvents();
+                ViewBag.Events = new SelectList(events, "EventID", "NameEvent");
+                return View(model);
+
+            }
+            else
             {
                 var ticket = new Ticket
                 {
@@ -112,12 +141,7 @@ namespace System_Rezerwacji_Biletów.Controllers
 
                 await _ticketService.UpdateTicket(id, ticket);
                 return RedirectToAction(nameof(ListTicket));
-            }
-
-            var events = _eventService.GetAllEvents();
-            ViewBag.Events = new SelectList(events, "EventID", "NameEvent");
-
-            return View(model);
+            }            
         }
 
         public IActionResult Delete(int id)

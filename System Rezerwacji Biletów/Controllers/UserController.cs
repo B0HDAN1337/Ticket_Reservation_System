@@ -1,18 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using System_Rezerwacji_Biletów.Models;
 using System_Rezerwacji_Biletów.Repository;
 using System_Rezerwacji_Biletów.Service;
 using System_Rezerwacji_Biletów.ViewModels;
+using FluentValidation;
+using System.Threading.Tasks;
+using FluentValidation.Results;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
+using Microsoft.AspNetCore.Diagnostics;
+using NuGet.Protocol;
 
 namespace System_Rezerwacji_Biletów.Controllers
 {
     public class UserController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IValidator<UserViewModel> _userValidator;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IValidator<UserViewModel> validator)
         {
             _userService = userService;
+            _userValidator = validator;
         }
 
         public IActionResult ListUser()
@@ -40,8 +49,17 @@ namespace System_Rezerwacji_Biletów.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(UserViewModel userModel)
         {
-            if (ModelState.IsValid)
+            ValidationResult userValidation = _userValidator.Validate(userModel);
+
+            if (!userValidation.IsValid)
             {
+                foreach (var errors in userValidation.Errors)
+                {
+                    ModelState.AddModelError("", errors.ErrorMessage);
+                }
+                return View(userModel);
+            } 
+            else {
                 var user = new User
                 {
                     UserID = userModel.UserID,
@@ -52,10 +70,9 @@ namespace System_Rezerwacji_Biletów.Controllers
                 };
 
                 _userService.CreateUser(user);
-            
+
                 return RedirectToAction(nameof(ListUser));
             }
-            return View(userModel);
         }
 
 
@@ -83,7 +100,17 @@ namespace System_Rezerwacji_Biletów.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(int id, UserViewModel userModel)
         {
-            if (ModelState.IsValid)
+            ValidationResult userValidation = _userValidator.Validate(userModel);
+
+            if (!userValidation.IsValid)
+            {
+                foreach(var errors in userValidation.Errors)
+                {
+                    ModelState.AddModelError("", errors.ErrorMessage);
+                }
+                return View(userModel);
+            }
+            else
             {
                 var user = new User
                 {
@@ -96,8 +123,7 @@ namespace System_Rezerwacji_Biletów.Controllers
 
                 await _userService.UpdateUser(id, user);
                 return RedirectToAction(nameof(ListUser));
-            } 
-                return View(userModel);
+            }
         }
 
         [HttpPost]

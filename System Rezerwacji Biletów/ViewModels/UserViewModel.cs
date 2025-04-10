@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace System_Rezerwacji_Biletów.ViewModels
 {
@@ -17,7 +17,6 @@ namespace System_Rezerwacji_Biletów.ViewModels
         public DateTime BirthDate { get; set; }
 
         [Required(ErrorMessage = "Please enter email")]
-        [EmailAddress(ErrorMessage = "incorrectly email")]
         public string email { get; set; }
     }
 }
