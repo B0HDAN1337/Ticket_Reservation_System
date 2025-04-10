@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System_Rezerwacji_Biletów.Repository;
 using System_Rezerwacji_Biletów.Data;
 using System_Rezerwacji_Biletów.Service;
@@ -34,6 +34,7 @@ builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<IValidator<UserViewModel>, UserValidator>();
 builder.Services.AddScoped<IValidator<EventViewModel>, EventValidator>();
 builder.Services.AddScoped<IValidator<TicketViewModel>, TicketValidator>();
+
 
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();

@@ -124,7 +124,6 @@ namespace System_Rezerwacji_Biletów.Controllers
                 await _userService.UpdateUser(id, user);
                 return RedirectToAction(nameof(ListUser));
             }
-                
         }
 
         [HttpPost]
