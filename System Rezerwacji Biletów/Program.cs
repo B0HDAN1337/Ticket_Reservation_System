@@ -6,6 +6,7 @@ using System_Rezerwacji_Biletów.Models;
 using FluentValidation;
 using System_Rezerwacji_Biletów.Validator;
 using System_Rezerwacji_Biletów.ViewModels;
+using System_Rezerwacji_Biletów.Mapper;
 
 //using System_Rezerwacji_Biletów.Services;
 
@@ -35,6 +36,8 @@ builder.Services.AddScoped<IValidator<UserViewModel>, UserValidator>();
 builder.Services.AddScoped<IValidator<EventViewModel>, EventValidator>();
 builder.Services.AddScoped<IValidator<TicketViewModel>, TicketValidator>();
 
+//Mapper
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
