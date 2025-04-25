@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System_Rezerwacji_Biletów.Repository;
 using System_Rezerwacji_Biletów.Data;
 using System_Rezerwacji_Biletów.Service;
@@ -38,6 +38,7 @@ builder.Services.AddScoped<IValidator<TicketViewModel>, TicketValidator>();
 
 //Mapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 

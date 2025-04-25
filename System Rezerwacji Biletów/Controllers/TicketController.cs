@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+
+using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -114,6 +115,7 @@ namespace System_Rezerwacji_Biletów.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(int id, TicketViewModel model)
         {
+
             ValidationResult ticketValidation = _ticketValidator.Validate(model);
             
             if(!ticketValidation.IsValid)
