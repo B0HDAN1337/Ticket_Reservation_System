@@ -10,18 +10,23 @@ using FluentValidation.Results;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.AspNetCore.Diagnostics;
 using NuGet.Protocol;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace System_Rezerwacji_Biletów.Controllers
 {
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
         private readonly IValidator<UserViewModel> _userValidator;
+        private readonly IMapper _mapper;
 
-        public UserController(IUserService userService, IValidator<UserViewModel> validator)
+        public UserController(IUserService userService, IValidator<UserViewModel> validator, IMapper mapper)
         {
             _userService = userService;
             _userValidator = validator;
+            _mapper = mapper;
         }
 
         public IActionResult ListUser()
@@ -29,16 +34,9 @@ namespace System_Rezerwacji_Biletów.Controllers
 
             var users = _userService.GetAllUsers();
 
-            var userViewModel = users.Select(user => new UserViewModel
-            {
-                UserID = user.UserID,
-                Name = user.Name,
-                LastName = user.LastName,
-                BirthDate = user.BirthDate,
-                email = user.email
-            });
+            var viewModel = _mapper.Map<List<UserViewModel>>(users);
             
-            return View(userViewModel);
+            return View(viewModel);
         }
 
         public IActionResult Create()
@@ -61,16 +59,10 @@ namespace System_Rezerwacji_Biletów.Controllers
                 return View(userModel);
             } 
             else {
-                var user = new User
-                {
-                    UserID = userModel.UserID,
-                    Name = userModel.Name,
-                    LastName = userModel.LastName,
-                    BirthDate = userModel.BirthDate,
-                    email = userModel.email
-                };
 
-                _userService.CreateUser(user);
+                var viewModel = _mapper.Map<User>(userModel);
+
+                _userService.CreateUser(viewModel);
 
                 return RedirectToAction(nameof(ListUser));
             }
@@ -85,14 +77,9 @@ namespace System_Rezerwacji_Biletów.Controllers
             {
                 return NotFound();
             }
-            var userModel = new UserViewModel
-            {
-                UserID = user.UserID,
-                Name = user.Name,
-                LastName = user.LastName,
-                BirthDate = user.BirthDate,
-                email = user.email
-            };
+
+            var userModel = _mapper.Map<UserViewModel>(user);
+
             return View(userModel);
         }
 
@@ -113,14 +100,7 @@ namespace System_Rezerwacji_Biletów.Controllers
             }
             else
             {
-                var user = new User
-                {
-                    UserID = userModel.UserID,
-                    Name = userModel.Name,
-                    LastName = userModel.LastName,
-                    BirthDate = userModel.BirthDate,
-                    email = userModel.email
-                };
+                var user = _mapper.Map<User>(userModel);
 
                 await _userService.UpdateUser(id, user);
                 return RedirectToAction(nameof(ListUser));

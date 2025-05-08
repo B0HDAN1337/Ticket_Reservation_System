@@ -1,6 +1,8 @@
 
+using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System_Rezerwacji_Biletów.Models;
@@ -10,31 +12,28 @@ using System_Rezerwacji_Biletów.ViewModels;
 
 namespace System_Rezerwacji_Biletów.Controllers
 {
+    [Authorize]
     public class EventController : Controller
     {
 
         private readonly IEventService _eventService;
         private readonly IValidator<EventViewModel> _eventValidator;
+        private readonly IMapper _mapper;
 
-        public EventController(IEventService eventService, IValidator<EventViewModel> validator)
+        public EventController(IEventService eventService, IValidator<EventViewModel> validator, IMapper mapper)
         {
             _eventService = eventService;
             _eventValidator = validator;
+            _mapper = mapper;
         }
 
+        [AllowAnonymous]
         public IActionResult ListEvent()
         {
 
             var event_ = _eventService.GetAllEvents();
 
-            var eventViewModel = event_.Select(events => new EventViewModel
-            {
-                EventID = events.EventID,
-                NameEvent = events.NameEvent,
-                Date = events.Date,
-                Location = events.Location,
-                description = events.description
-            });
+            var eventViewModel = _mapper.Map<List<EventViewModel>>(event_);
 
             return View(eventViewModel);
         }
@@ -60,14 +59,7 @@ namespace System_Rezerwacji_Biletów.Controllers
             }
             else
             {
-                var events = new Event
-                {
-                    EventID = eventModel.EventID,
-                    NameEvent = eventModel.NameEvent,
-                    Date = eventModel.Date,
-                    Location = eventModel.Location,
-                    description = eventModel.description
-                };
+                var events = _mapper.Map<Event>(eventModel);
 
                 _eventService.CreateEvent(events);
                 return RedirectToAction(nameof(ListEvent));
@@ -84,14 +76,7 @@ namespace System_Rezerwacji_Biletów.Controllers
                 return NotFound();  
             }
 
-            var events = new EventViewModel
-            {
-                EventID = event_.EventID,
-                NameEvent = event_.NameEvent,
-                Date = event_.Date,
-                Location = event_.Location,
-                description = event_.description
-            };
+            var events = _mapper.Map<EventViewModel>(event_);
             return View(events);
         }
 
@@ -111,14 +96,7 @@ namespace System_Rezerwacji_Biletów.Controllers
             }
             else
             {
-                var events = new Event
-                {
-                    EventID = eventModel.EventID,
-                    NameEvent = eventModel.NameEvent,
-                    Date = eventModel.Date,
-                    Location = eventModel.Location,
-                    description = eventModel.description
-                };
+                var events = _mapper.Map<Event>(eventModel);
 
                 await _eventService.UpdateEvent(id, events);
                 return RedirectToAction(nameof(ListEvent));
