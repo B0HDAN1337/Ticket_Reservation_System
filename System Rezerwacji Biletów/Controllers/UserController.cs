@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using System_Rezerwacji_Biletów.Models;
 using System_Rezerwacji_Biletów.Repository;
@@ -31,6 +31,7 @@ namespace System_Rezerwacji_Biletów.Controllers
 
         public IActionResult ListUser()
         {
+
             var users = _userService.GetAllUsers();
 
             var viewModel = _mapper.Map<List<UserViewModel>>(users);
@@ -110,7 +111,6 @@ namespace System_Rezerwacji_Biletów.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
-
             var userId = _userService.GetUserById(id);
 
             if(userId == null)

@@ -1,10 +1,11 @@
-﻿@model IEnumerable<System_Rezerwacji_Biletów.ViewModels.EventViewModel>
+@model IEnumerable<System_Rezerwacji_Biletów.ViewModels.EventViewModel>
 @{
     ViewData["Title"] = "ListEvent";
 }
 
 
 <h1>List Event</h1>
+
 <p>
     <a asp-action="Create"> Create New</a>
 </p>
@@ -15,6 +16,7 @@
             <th>@Html.DisplayNameFor(model => model.Date)</th>
             <th>@Html.DisplayNameFor(model => model.Location)</th>
             <th>@Html.DisplayNameFor(model => model.description)</th>
+
             <th>Actions</th>
         </tr>
     </thead>

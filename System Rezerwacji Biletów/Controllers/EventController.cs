@@ -1,3 +1,4 @@
+
 using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
@@ -14,6 +15,7 @@ namespace System_Rezerwacji_Biletów.Controllers
     [Authorize]
     public class EventController : Controller
     {
+
         private readonly IEventService _eventService;
         private readonly IValidator<EventViewModel> _eventValidator;
         private readonly IMapper _mapper;
@@ -28,6 +30,7 @@ namespace System_Rezerwacji_Biletów.Controllers
         [AllowAnonymous]
         public IActionResult ListEvent()
         {
+
             var event_ = _eventService.GetAllEvents();
 
             var eventViewModel = _mapper.Map<List<EventViewModel>>(event_);
@@ -105,6 +108,7 @@ namespace System_Rezerwacji_Biletów.Controllers
         public IActionResult Delete(int id)
         {
             var event_ = _eventService.GetEventById(id);
+            
             if (event_ == null)
             {
                 return NotFound();
@@ -114,8 +118,5 @@ namespace System_Rezerwacji_Biletów.Controllers
 
             return RedirectToAction(nameof(ListEvent));
         }
-
-
-
     }
 }
