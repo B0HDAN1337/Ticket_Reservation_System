@@ -11,9 +11,11 @@ using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.AspNetCore.Diagnostics;
 using NuGet.Protocol;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace System_Rezerwacji_Biletów.Controllers
 {
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IUserService _userService;

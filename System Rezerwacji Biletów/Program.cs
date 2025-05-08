@@ -7,6 +7,8 @@ using FluentValidation;
 using System_Rezerwacji_Biletów.Validator;
 using System_Rezerwacji_Biletów.ViewModels;
 using System_Rezerwacji_Biletów.Mapper;
+using Microsoft.AspNetCore.Identity;
+using System_Rezerwacji_Biletow.Data;
 
 //using System_Rezerwacji_Biletów.Services;
 
@@ -18,6 +20,12 @@ builder.Services.AddControllersWithViews();
 //Add database
 builder.Services.AddDbContext<SystemReservationContext>(options => 
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddDbContext<System_Rezerwacji_BiletowContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<System_Rezerwacji_BiletowContext>();
+builder.Services.AddRazorPages();
 
 //Repository
 builder.Services.AddScoped<IEventRepository, EventRepository>();
@@ -61,6 +69,8 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.MapRazorPages();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
@@ -69,7 +79,7 @@ app.Run();
 
 
 
-void InitializeDatabase(WebApplication app)
+void InitializeDatabase(WebApplication app) 
 {
     using (var scope = app.Services.CreateScope())
     {

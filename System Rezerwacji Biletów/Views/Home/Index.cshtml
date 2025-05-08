@@ -3,6 +3,24 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome to Reservation System</h1>
+    <p class="lead mt-3">
+        Book your tickets quickly and securely with our easy-to-use reservation system.
+    </p>
+
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <p class="mt-4">
+            <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            or
+            <a class="btn btn-outline-secondary" asp-area="Identity" asp-page="/Account/Register">Register</a>
+            to start booking.
+        </p>
+    }
+    else
+    {
+        <p class="mt-4">
+            <a class="btn btn-success" asp-area="" asp-controller="Event" asp-action="ListEvent">See the events</a>
+        </p>
+    }
 </div>
