@@ -8,7 +8,6 @@ using System_Rezerwacji_Biletów.Validator;
 using System_Rezerwacji_Biletów.ViewModels;
 using System_Rezerwacji_Biletów.Mapper;
 using Microsoft.AspNetCore.Identity;
-using System_Rezerwacji_Biletow.Data;
 
 //using System_Rezerwacji_Biletów.Services;
 
@@ -21,24 +20,20 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<SystemReservationContext>(options => 
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
-builder.Services.AddDbContext<System_Rezerwacji_BiletowContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<System_Rezerwacji_BiletowContext>();
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<SystemReservationContext>();
 builder.Services.AddRazorPages();
 
 //Repository
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
-builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+//builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 
 //Service
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITicketService, TIcketService>();
-builder.Services.AddScoped<IReservationService, ReservationService>();
+//builder.Services.AddScoped<IReservationService, ReservationService>();
 
 //Validator
 builder.Services.AddScoped<IValidator<UserViewModel>, UserValidator>();

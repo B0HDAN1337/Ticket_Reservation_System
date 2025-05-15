@@ -1,9 +1,10 @@
 ﻿using System_Rezerwacji_Biletów.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace System_Rezerwacji_Biletów.Data
 {
-    public class SystemReservationContext : DbContext
+    public class SystemReservationContext : IdentityDbContext
     {
         public SystemReservationContext(DbContextOptions<SystemReservationContext> options) : base(options)
         {
@@ -17,6 +18,8 @@ namespace System_Rezerwacji_Biletów.Data
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Reservation>().ToTable("Reservation");
             modelBuilder.Entity<Ticket>().ToTable("Ticket");
             modelBuilder.Entity<User>().ToTable("User");
