@@ -11,7 +11,7 @@ using System_Rezerwacji_Biletów.ViewModels;
 
 namespace System_Rezerwacji_Biletów.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "AllUsers")]
     public class TicketController : Controller
     {
         private readonly ITicketService _ticketService;
