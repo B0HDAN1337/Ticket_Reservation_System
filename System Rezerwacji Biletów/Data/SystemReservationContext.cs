@@ -1,6 +1,7 @@
 ﻿using System_Rezerwacji_Biletów.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace System_Rezerwacji_Biletów.Data
 {

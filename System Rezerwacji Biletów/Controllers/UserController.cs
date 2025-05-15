@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace System_Rezerwacji_Biletów.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "OnlyAdmin")]
     public class UserController : Controller
     {
         private readonly IUserService _userService;

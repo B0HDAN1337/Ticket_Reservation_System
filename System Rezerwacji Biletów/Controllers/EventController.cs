@@ -15,7 +15,6 @@ namespace System_Rezerwacji_Biletów.Controllers
     [Authorize]
     public class EventController : Controller
     {
-
         private readonly IEventService _eventService;
         private readonly IValidator<EventViewModel> _eventValidator;
         private readonly IMapper _mapper;
@@ -45,6 +44,7 @@ namespace System_Rezerwacji_Biletów.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "ManagerOrAdmin")]
         public IActionResult Create(EventViewModel eventModel)
         {
             ValidationResult eventValidation = _eventValidator.Validate(eventModel);
@@ -82,6 +82,7 @@ namespace System_Rezerwacji_Biletów.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "ManagerOrAdmin")]
         public async Task<IActionResult> Update(int id, EventViewModel eventModel)
         {
             ValidationResult eventValidation = _eventValidator.Validate(eventModel);
@@ -105,6 +106,7 @@ namespace System_Rezerwacji_Biletów.Controllers
 
 
         [HttpPost]
+        [Authorize(Policy = "OnlyAdmin")]
         public IActionResult Delete(int id)
         {
             var event_ = _eventService.GetEventById(id);

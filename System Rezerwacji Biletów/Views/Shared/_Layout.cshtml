@@ -1,3 +1,7 @@
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,14 +39,27 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Reservation" asp-action="ListReservation">Reservations</a>
                         </li>
                     </ul>
+                    <div>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            var user = await UserManager.GetUserAsync(User);
+                            var roles = await UserManager.GetRolesAsync(user);
+                            
+                                @foreach( var role in roles)
+                                {
+                                    <a class="nav-link btn btn-link text-dark">@role</a>
+                                }
+                            <a class="nav-link btn btn-link text-dark">@user.UserName</a>
+                        }
+                    </div>
                     <div> 
-                            @if(User.Identity?.IsAuthenticated ?? false)
-                            {
-                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                                    <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-                                </form>
-                            }
-                     </div>
+                        @if(User.Identity?.IsAuthenticated ?? false)
+                        {
+                            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                            </form>
+                        }
+                    </div>
                 </div>
             </div>
         </nav>
