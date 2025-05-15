@@ -2,13 +2,21 @@
 @{
     ViewData["Title"] = "ListEvent";
 }
-
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@{
+    var ManagerOrAdmin = (await AuthorizationService.AuthorizeAsync(User, "ManagerOrAdmin")).Succeeded;
+    var Admin = (await AuthorizationService.AuthorizeAsync(User, "OnlyAdmin")).Succeeded;
+}
 
 <h1>List Event</h1>
 
-<p>
-    <a asp-action="Create"> Create New</a>
-</p>
+@if (ManagerOrAdmin)
+{
+    <p>
+        <a asp-action="Create"> Create New</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -29,11 +37,18 @@
                 <td>@events.Location</td>
                 <td>@events.description</td>
                 <td>
+                    @if(ManagerOrAdmin || Admin)
+                    {
                     <a asp-action="Update" asp-route-id="@events.EventID">Edit</a>
-                    <form asp-action="Delete" asp-route-id="@events.EventID" method="post" style="display:inline;">
-                        @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-danger" style="inset-inline">Delete</button>
-                    </form>
+                    }
+                    @if(Admin)
+                    {
+                        <form asp-action="Delete" asp-route-id="@events.EventID" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger" style="inset-inline">Delete</button>
+                        </form>
+                    }
+
                 </td>
             </tr>
         }
