@@ -8,6 +8,7 @@ using System_Rezerwacji_Biletów.Validator;
 using System_Rezerwacji_Biletów.ViewModels;
 using System_Rezerwacji_Biletów.Mapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Sqlite;
 
 //using System_Rezerwacji_Biletów.Services;
 
@@ -18,7 +19,7 @@ builder.Services.AddControllersWithViews();
 
 //Add database
 builder.Services.AddDbContext<SystemReservationContext>(options => 
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>().AddEntityFrameworkStores<SystemReservationContext>();
