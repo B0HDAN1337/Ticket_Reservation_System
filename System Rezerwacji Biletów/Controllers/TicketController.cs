@@ -1,6 +1,7 @@
 
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,7 @@ using System_Rezerwacji_Biletów.ViewModels;
 
 namespace System_Rezerwacji_Biletów.Controllers
 {
+    [Authorize(Policy = "AllUsers")]
     public class TicketController : Controller
     {
         private readonly ITicketService _ticketService;

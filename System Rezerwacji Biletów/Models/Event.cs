@@ -10,6 +10,6 @@ namespace System_Rezerwacji_Biletów.Models
         public string Location { get; set; }
         public string description { get; set; }
 
-        public ICollection<Ticket>? Tickets { get; set; }
+        public ICollection<Ticket> Tickets { get; set; }
     }
 }

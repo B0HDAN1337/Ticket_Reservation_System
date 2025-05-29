@@ -1,11 +1,17 @@
 @model System_Rezerwacji_Biletów.ViewModels.EventViewModel
 @{ViewData["Title"] = "Create";}
-
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@{
+    var ManagerOrAdmin = (await AuthorizationService.AuthorizeAsync(User, "ManagerOrAdmin")).Succeeded;
+}
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" method="post">
-            @Html.AntiForgeryToken()
+        @if (ManagerOrAdmin)
+        {
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
             <div class="form-group">
                 <label class="control-label" asp-for="NameEvent">Event</label>
                 <input class="form-control" asp-for="NameEvent"/>
@@ -31,6 +37,7 @@
             </div>
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         </form>
+        }
     </div>
 </div>
 

@@ -6,6 +6,9 @@ using System_Rezerwacji_Biletów.Models;
 using FluentValidation;
 using System_Rezerwacji_Biletów.Validator;
 using System_Rezerwacji_Biletów.ViewModels;
+using System_Rezerwacji_Biletów.Mapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Sqlite;
 
 //using System_Rezerwacji_Biletów.Services;
 
@@ -16,24 +19,77 @@ builder.Services.AddControllersWithViews();
 
 //Add database
 builder.Services.AddDbContext<SystemReservationContext>(options => 
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>().AddEntityFrameworkStores<SystemReservationContext>();
+builder.Services.AddRazorPages();
+
+static async Task CreateRoles(IServiceProvider serviceProvider)
+{
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    string[] roleNames = { "Admin", "Manager", "User" };
+
+    foreach (var roleName in roleNames)
+    {
+        if(!await roleManager.RoleExistsAsync(roleName))
+        {
+            await roleManager.CreateAsync(new IdentityRole(roleName));
+        }
+    }
+
+    await CreateUserWithRole(userManager, "admin@email.com", "Admin!123", "Admin");
+    await CreateUserWithRole(userManager, "manager@email.com", "Manager!123", "Manager");
+}
+
+static async Task CreateUserWithRole(UserManager<IdentityUser> userManager, string email, string password, string role )
+{
+    var user = await userManager.FindByEmailAsync(email);
+
+    if(user == null)
+    {
+        user = new IdentityUser
+        {
+            UserName = email,
+            Email = email,
+            EmailConfirmed = true
+        };
+
+        var result = await userManager.CreateAsync(user, password);
+        if(result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(user, role);
+        }
+    }
+}
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("OnlyAdmin", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("ManagerOrAdmin", policy => policy.RequireRole("Manager", "Admin"));
+    options.AddPolicy("AllUsers", policy => policy.RequireRole("User", "Manager", "Admin"));
+});
 
 //Repository
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
-builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+//builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 
 //Service
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITicketService, TIcketService>();
-builder.Services.AddScoped<IReservationService, ReservationService>();
+//builder.Services.AddScoped<IReservationService, ReservationService>();
 
 //Validator
 builder.Services.AddScoped<IValidator<UserViewModel>, UserValidator>();
 builder.Services.AddScoped<IValidator<EventViewModel>, EventValidator>();
 builder.Services.AddScoped<IValidator<TicketViewModel>, TicketValidator>();
+
+//Mapper
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -57,13 +113,11 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.MapRazorPages();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.Run();
-
-
 
 void InitializeDatabase(WebApplication app)
 {
@@ -73,7 +127,7 @@ void InitializeDatabase(WebApplication app)
         try
         {
             var context = services.GetRequiredService<SystemReservationContext>();
-            DbInitializer.Initializer(context);  
+            DbInitializer.Initializer(context);
         }
         catch (Exception ex)
         {
@@ -82,4 +136,16 @@ void InitializeDatabase(WebApplication app)
         }
     }
 }
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await CreateRoles(services);
+}
+
+app.Run();
+
+
+
+
 

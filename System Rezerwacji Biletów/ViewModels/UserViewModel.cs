@@ -4,7 +4,7 @@ namespace System_Rezerwacji_Biletów.ViewModels
 {
     public class UserViewModel
     {
-        public int UserID { get; set; }
+        public string UserID { get; set; }
 
         [Required(ErrorMessage = "Please enter name")]
         public string Name { get; set; }
@@ -18,6 +18,9 @@ namespace System_Rezerwacji_Biletów.ViewModels
 
         [Required(ErrorMessage = "Please enter email")]
         public string email { get; set; }
+
+        public string CurrentRole { get; set; }
+        public List<string> AvailableRoles { get; set; }
     }
 }
 
