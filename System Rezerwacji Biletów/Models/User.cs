@@ -11,7 +11,7 @@ namespace System_Rezerwacji_Biletów.Models
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
         public string email { get; set; }
-        public ICollection<Reservation>? Reservations { get; set; }
+        public ICollection<Reservation> Reservations { get; set; }
 
         
     }
