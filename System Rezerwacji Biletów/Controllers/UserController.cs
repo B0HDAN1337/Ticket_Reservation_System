@@ -33,7 +33,6 @@ namespace System_Rezerwacji_Biletów.Controllers
         {
 
             var users = _userService.GetAllUsers();
-
             var viewModel = _mapper.Map<List<UserViewModel>>(users);
             
             return View(viewModel);
