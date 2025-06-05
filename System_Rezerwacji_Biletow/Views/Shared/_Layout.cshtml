@@ -1,3 +1,5 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -15,37 +17,39 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-ticket-alt"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">Reservation</div>
+                <div class="sidebar-brand-text mx-3">@Localizer["Reservation"]</div>
             </a>
             <hr class="sidebar-divider my-0">
             <li class="nav-item">
                 <a class="nav-link" asp-controller="User" asp-action="ListUser">
                     <i class="fas fa-users"></i>
-                    <span>Users</span>
+                    <span>@Localizer["Users"]</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" asp-controller="Event" asp-action="ListEvent">
                     <i class="fas fa-calendar-alt"></i>
-                    <span>Events</span>
+                    <span>@Localizer["Events"]</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" asp-controller="Ticket" asp-action="ListTicket">
                     <i class="fas fa-ticket-alt"></i>
-                    <span>Tickets</span>
+                    <span>@Localizer["Tickets"]</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" asp-controller="Reservation" asp-action="ListReservation">
                     <i class="fas fa-book"></i>
-                    <span>Reservations</span>
+                    <span>@Localizer["Reservations"]</span>
                 </a>
             </li>
         </ul>
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <a href="?culture=en-US">English</a> | <a href="?culture=pl-PL">Polski</a>
+
     <ul class="navbar-nav ml-auto">
         @if (User.Identity?.IsAuthenticated ?? false)
         {
@@ -62,7 +66,7 @@
                             asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
                             <button type="submit" class="btn btn-link dropdown-item">
                                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Log out
+                                @Localizer["Log out"]
                             </button>
                         </form>
                     </div>
@@ -72,7 +76,7 @@
         else
         {
             <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">
-                <i class="fas fa-sign-in-alt fa-sm fa-fw mr-1 text-gray-400"></i>Log in
+                <i class="fas fa-sign-in-alt fa-sm fa-fw mr-1 text-gray-400"></i>@Localizer["Log in"]
             </a>
         }
     </ul>
