@@ -1,4 +1,6 @@
 @model IEnumerable<System_Rezerwacji_Biletów.ViewModels.EventViewModel>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "ListEvent";
 }
@@ -9,23 +11,23 @@
     var Admin = (await AuthorizationService.AuthorizeAsync(User, "OnlyAdmin")).Succeeded;
 }
 
-<h1>List Event</h1>
+<h1>@Localizer["List Event"]</h1>
 
 @if (ManagerOrAdmin)
 {
     <p>
-        <a asp-action="Create"> Create New</a>
+        <a asp-action="Create"> @Localizer["Create new"]</a>
     </p>
 }
 <table class="table">
     <thead>
         <tr>
-            <th>@Html.DisplayNameFor(model => model.NameEvent)</th>
-            <th>@Html.DisplayNameFor(model => model.Date)</th>
-            <th>@Html.DisplayNameFor(model => model.Location)</th>
-            <th>@Html.DisplayNameFor(model => model.description)</th>
+            <th>@Localizer["NameEvent"]</th>
+            <th>@Localizer["Date"]</th>
+            <th>@Localizer["Location"]</th>
+            <th>@Localizer["description"]</th>
 
-            <th>Actions</th>
+            <th>@Localizer["Actions"]</th>
         </tr>
     </thead>
     <tbody>
@@ -39,13 +41,13 @@
                 <td>
                     @if(ManagerOrAdmin || Admin)
                     {
-                    <a asp-action="Update" asp-route-id="@events.EventID">Edit</a>
+                    <a asp-action="Update" asp-route-id="@events.EventID">@Localizer["Edit"]</a>
                     }
                     @if(Admin)
                     {
                         <form asp-action="Delete" asp-route-id="@events.EventID" method="post" style="display:inline;">
                             @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-danger" style="inset-inline">Delete</button>
+                            <button type="submit" class="btn btn-danger" style="inset-inline">@Localizer["Delete"]</button>
                         </form>
                     }
 

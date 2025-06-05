@@ -1,4 +1,6 @@
 @model System_Rezerwacji_Biletów.ViewModels.EventViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{ViewData["Title"] = "Create";}
 @using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
@@ -13,22 +15,22 @@
             <form asp-action="Create" method="post">
                 @Html.AntiForgeryToken()
             <div class="form-group">
-                <label class="control-label" asp-for="NameEvent">Event</label>
+                <label class="control-label" asp-for="NameEvent">@Localizer["Event"]</label>
                 <input class="form-control" asp-for="NameEvent"/>
                 <span asp-validation-for="NameEvent" class="text-danger"></span>
             </div>  
             <div class="form-group">
-                <label class="control-label" asp-for="Date">Date</label>
+                <label class="control-label" asp-for="Date">@Localizer["Date"]</label>
                 <input class="form-control" type="date" asp-for="Date" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label" asp-for="Location">Location</label>
+                <label class="control-label" asp-for="Location">@Localizer["Location"]</label>
                 <input class="form-control" asp-for="Location"/>
                 <span asp-validation-for="Location" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label" asp-for="description">Description</label>
+                <label class="control-label" asp-for="description">@Localizer["Description"]</label>
                 <input class="form-control" asp-for="description" />
                 <span asp-validation-for="description" class="text-danger"></span>
             </div>

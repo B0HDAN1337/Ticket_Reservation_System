@@ -1,19 +1,20 @@
 @model IEnumerable<System_Rezerwacji_Biletów.ViewModels.UserViewModel>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Admin Dashboard";
 }
 
-<h1>Admin Dashboard</h1>
+<h1>@Localizer["Admin Dashboard"]</h1>
 
 <table class="table">
     <thead>
         <tr>
-            <th>Email</th>
+            <th>@Localizer["Email"]</th>
             <th></th>
-            <th>Role</th>
-            <th>Change Role</th>
-            <th>Actions</th>
+            <th>@Localizer["Role"]</th>
+            <th>@Localizer["Change Role"]</th>
+            <th>@Localizer["Actions"]</th>
         </tr>
     </thead>
     <tbody>
@@ -32,13 +33,13 @@
                                 <option value="@role" selected="@(role == user.CurrentRole ? "selected" : null)">@role</option>
                             }
                         </select>
-                        <button type="submit" class="btn btn-primary btn-sm">Change</button>
+                        <button type="submit" class="btn btn-primary btn-sm">@Localizer["Change"]</button>
                     </form>
                 </td>
                 <td>
                     <form asp-action="Delete" method="post" onsubmit="return confirm('Are you sure to delete user @user.Name?');">
                         <input type="hidden" name="userId" value="@user.UserID" />
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        <button type="submit" class="btn btn-danger btn-sm">@Localizer["Delete"]</button>
                     </form>
                 </td>
             </tr>

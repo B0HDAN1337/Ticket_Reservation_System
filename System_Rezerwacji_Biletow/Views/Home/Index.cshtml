@@ -1,26 +1,28 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome to Reservation System</h1>
+    <h1 class="display-4">@Localizer["Welcome to Reservation System"]</h1>
     <p class="lead mt-3">
-        Book your tickets quickly and securely with our easy-to-use reservation system.
+        @Localizer["Welcome"]
     </p>
 
     @if (!User.Identity.IsAuthenticated)
     {
         <p class="mt-4">
-            <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Login">Login</a>
-            or
-            <a class="btn btn-outline-secondary" asp-area="Identity" asp-page="/Account/Register">Register</a>
-            to start booking.
+            <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Login">@Localizer["Login"]</a>
+            @Localizer["or"]
+            <a class="btn btn-outline-secondary" asp-area="Identity" asp-page="/Account/Register">@Localizer["Register"]</a>
+            @Localizer["Start booking"]
         </p>
     }
     else
     {
         <p class="mt-4">
-            <a class="btn btn-success" asp-area="" asp-controller="Event" asp-action="ListEvent">See the events</a>
+            <a class="btn btn-success" asp-area="" asp-controller="Event" asp-action="ListEvent">@Localizer["See the events"]</a>
         </p>
     }
 </div>
